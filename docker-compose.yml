@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+  backend:
+    build: backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - static:/app/static
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+#  frontend:
+#    build: frontend
+#    volumes:
+#      - build:/app/build
+
+  nginx:
+    build: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - build:/var/www/frontend
+      - static:/var/www/static
+    depends_on:
+      - backend
+#      - frontend
+
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+
+volumes:
+  static:
+  build:
+  data:
