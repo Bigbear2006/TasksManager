@@ -34,8 +34,8 @@ class APITestCase(TestCase):
     def _headers(token) -> dict:
         return {'Authorization': f'Bearer {token}'}
 
-    def _get_token(self, username, password) -> dict:
-        rsp = self.client.post(reverse('get-token'), {'username': username, 'password': password})
+    def _get_token(self, email, password) -> dict:
+        rsp = self.client.post(reverse('get-token'), {'email': email, 'password': password})
         data = self._get_data(rsp)
         return data
 
@@ -50,19 +50,28 @@ class APITestCase(TestCase):
             end_date=datetime(2024, 3, 5),
             priority=models.Task.LOW_PRIORITY,
             status=models.Task.STATUS_PLANNED,
-            user=admin,
+            user=user,
             project=project
         )
 
         self.user = user
         self.admin = admin
 
+        self.user_access = self._get_token(self.user_data['email'], self.user_data['password'])['access']
+        self.admin_access = self._get_token(self.admin_data['email'], self.admin_data['password'])['access']
+
     def test_delete_task_by_admin(self):
-        token = self._get_token(self.admin_data['username'], self.admin_data['password'])
-        self.client.delete('http://localhost:8000/api/tasks/1/', headers=self._headers(token['access']))
+        self.client.delete('http://localhost:8000/api/tasks/1/', headers=self._headers(self.admin_access))
         self.assertEqual(len(models.Task.objects.all()), 0)
 
     def test_delete_task_by_user(self):
-        token = self._get_token(self.user_data['username'], self.user_data['password'])
-        self.client.delete('http://localhost:8000/api/tasks/1/', headers=self._headers(token['access']))
-        self.assertEqual(len(models.Task.objects.all()), 1)
+        self.client.delete('http://localhost:8000/api/tasks/1/', headers=self._headers(self.user_access))
+        self.assertEqual(len(models.Task.objects.all()), 0)
+
+    def test_get_user_tasks(self):
+        rsp = self.client.get('http://localhost:8000/api/tasks/my/', headers=self._headers(self.user_access))
+        print(rsp.content.decode())
+
+    def test_get_user_projects(self):
+        rsp = self.client.get('http://localhost:8000/api/projects/my/', headers=self._headers(self.user_access))
+        print(rsp.content.decode())

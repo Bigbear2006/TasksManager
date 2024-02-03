@@ -9,6 +9,8 @@ class TaskSerializer(ModelSerializer):
 
 
 class ProjectSerializer(ModelSerializer):
+    tasks = TaskSerializer(many=True)
+
     class Meta:
         model = models.Project
-        fields = '__all__'
+        fields = ('title', 'description', 'created_at', 'main_user', 'tasks')
