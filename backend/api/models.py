@@ -46,9 +46,9 @@ class Task(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     priority = models.CharField(max_length=7, choices=PRIORITIES)
-    status = models.CharField(max_length=11, choices=STATUSES)
+    status = models.CharField(max_length=11, choices=STATUSES, default=STATUS_PLANNED)
     user = models.ForeignKey(User, models.SET_NULL, 'tasks', null=True)
-    project = models.ForeignKey(Project, models.CASCADE, 'tasks')
+    project = models.ForeignKey(Project, models.CASCADE, 'tasks', null=True)
 
     def __str__(self):
         return self.title
