@@ -32,7 +32,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.79.100', 'api', '127.0.0.1']
 
-
+CSRF_TRUSTED_ORIGINS = ['https://new-team.space']
 # Application definition
 
 INSTALLED_APPS = [
@@ -155,3 +155,4 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+
