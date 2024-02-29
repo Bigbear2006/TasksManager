@@ -29,3 +29,10 @@ class UserInfoAPIView(APIView):
 
     def get(self, request: Request):
         return Response(serializers.UserSerializer(request.user).data)
+
+
+class UserListAPIView(APIView):
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request: Request):
+        return serializers.UserSerializer(models.User.objects.all(), many=True).data
