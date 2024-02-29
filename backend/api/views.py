@@ -8,7 +8,7 @@ from . import models, serializers
 class CanManageTask(BasePermission):
     def has_permission(self, request, view):
         if view.action in ('list', 'create'):
-            return request.user.is_superuser
+            return request.user.is_staff
         return True
 
     def has_object_permission(self, request, view, obj):
