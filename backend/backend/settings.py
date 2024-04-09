@@ -30,9 +30,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.79.100', 'api', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.79.100', 'api', '127.0.0.1', 'localhost']
 
-CSRF_TRUSTED_ORIGINS = ['http://new-team.space', 'https://new-team.space']
+CSRF_TRUSTED_ORIGINS = ['http://new-team.space', 'https://new-team.space', 'http://127.0.0.1', 'http://localhost']
 
 # Application definition
 
@@ -161,3 +161,19 @@ SIMPLE_JWT = {
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_PORT = 587
+
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
+
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+VERIFY_EMAIL_URL = os.getenv('VERIFY_EMAIL_URL')
